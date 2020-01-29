@@ -106,7 +106,7 @@ void set(char ** command, struct MEM * memarray){
             memarray=realloc(memarray, 2*sizeof(memarray));
         }
        for(int i=0; i<sizeof(memarray) && memarray[i].var!=NULL; ++i){
-           printf("i is : %d\n", i);
+           //printf("i is : %d\n", i);
            index = i;
        }
         
