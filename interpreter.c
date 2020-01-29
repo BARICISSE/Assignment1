@@ -15,9 +15,9 @@ int interpreter(char **command, struct MEM * memarray){
     // maps command to corresponding function
     char *commandName = command[0];
     printf("commandnAME: %s\n", commandName);
-    if(strcmp(commandName, "quit\n")==0){
+    if(strcmp(commandName, "quit")==0){
         return -2;
-    } else if(strcmp(commandName, "help\n")==0){
+    } else if(strcmp(commandName, "help")==0){
         help();
         return 0;
 
@@ -31,7 +31,7 @@ int interpreter(char **command, struct MEM * memarray){
         //printf("=====DONE PRINTING TO PRINT======\n");
         return 0;
 
-    } else if(strcmp(commandName, "run\n")==0){
+    } else if(strcmp(commandName, "run")==0){
         run();
         return 0;
 
@@ -74,11 +74,12 @@ void set(char ** command, struct MEM * memarray){
     char *ptr2 = value;
 
     strcpy(ptr1, command[1]);
-    strcpy(ptr2, command[1]);
+    strcpy(ptr2, command[2]);
     
     for(int i=3; i<sizeof(command) & command[i] != NULL; i++){
-        strcat(value, command[i]);
+        strcat(ptr2, command[i]);
     }
+    
     struct MEM temp;
   
     int index =-1;

@@ -16,6 +16,7 @@ char **parse(char *input){
     char *parsed;
     int index = 0;
     parsed = strtok(input, separator);
+    
     int i = 3;
     while(parsed != NULL){
         command[index] = parsed;
@@ -53,7 +54,9 @@ int main(){
     printf("\nWelcome to the obaric shell!\n Version 1.0 Created January 2020\n$ ");
     while(1){
         fgets(input, 1000, stdin);
-        
+        while(input[strlen(input)-1] == '\r' || input[strlen(input)-1] == '\n'){
+			input[strlen(input)-1] = '\0';
+        }
         char *inputStr = input;
         
         command = parse(inputStr);
