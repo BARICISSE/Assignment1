@@ -14,7 +14,7 @@ int interpreter(char **command, struct MEM * memarray){
     
     // maps command to corresponding function
     char *commandName = command[0];
-    printf("commandnAME: %s\n", commandName);
+    // printf("commandnAME: %s\n", commandName);
     if(strcmp(commandName, "quit")==0){
         return -2;
     } else if(strcmp(commandName, "help")==0){

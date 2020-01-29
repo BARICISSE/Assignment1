@@ -51,7 +51,7 @@ int main(){
     // }
     // printf("\n SIZE OF MEMARRAY : %d", j);
     //printArt();
-    printf("\nWelcome to the obaric shell!\n Version 1.0 Created January 2020\n$ ");
+    printf("\nWelcome to the obaric shell!\nVersion 1.0 Created January 2020\n$ ");
     while(1){
         fgets(input, 1000, stdin);
         while(input[strlen(input)-1] == '\r' || input[strlen(input)-1] == '\n'){
