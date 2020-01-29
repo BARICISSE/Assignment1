@@ -63,7 +63,7 @@ void print(char ** command, struct MEM * memarray){
     if(index<0) printf("Variable does not exist\n");
     else if(index>=0){
         char *value =  memarray[index].value;
-        printf("===VALUE IS : %s\n", value);
+        printf("%s\n", value);
     }
 }
 
@@ -84,15 +84,15 @@ void set(char ** command, struct MEM * memarray){
   
     int index =-1;
     for(int i=0; i<sizeof(memarray) && memarray[i].var != NULL; ++i){
-         printf("CHAR IS : %s\n", memarray[i].var);
+        //  printf("CHAR IS : %s\n", memarray[i].var);
          if(strcmp(memarray[i].var, command[1])==0){
-             printf("MEMARRAY CUR VAL IS : %s\n", memarray[i].var);
-             printf("CONTAINS FOUND : %s\n", memarray[i].value);
+            //  printf("MEMARRAY CUR VAL IS : %s\n", memarray[i].var);
+            //  printf("CONTAINS FOUND : %s\n", memarray[i].value);
              index = i;
              break;
          }
      }
-    printf("Index is : %d\n", index);
+    // printf("Index is : %d\n", index);
    if(index >= 0){
         if(index==sizeof(memarray)){
             memarray=realloc(memarray, 2*sizeof(memarray));
@@ -101,7 +101,7 @@ void set(char ** command, struct MEM * memarray){
         memarray[index].value = strdup(ptr2);
     
    } else {
-       printf("%s NOT FOUND\n", ptr1);
+    //    printf("%s NOT FOUND\n", ptr1);
        if(index==sizeof(memarray)){
             memarray=realloc(memarray, 2*sizeof(memarray));
         }
@@ -110,15 +110,9 @@ void set(char ** command, struct MEM * memarray){
            index = i;
        }
         
-        // strcpy(temp.var, varName);
-        // strcpy(temp.value, value);
         index = index + 1;
         memarray[index].var = strdup(ptr1);
         memarray[index].value = strdup(ptr2);
-        // memarray[index].var = "none";
-        // memarray[index].value = "none";
-        // strcpy(memarray[index].var, varName);
-        // strcpy(memarray[index].value, value);
         
         
        
@@ -126,18 +120,24 @@ void set(char ** command, struct MEM * memarray){
 
 }
 void help(){
-    printf("help\nrun\nprint\nset\nquit\n");
+    printf("COMMAND                 DESCRIPTION \n");
+	printf("help                   Displays all the commands \n");
+	printf("quit                   Exits / terminates the shell with Bye!\n");
+	printf("set VAR STRING         Assigns a value to shell memory \n");
+	printf("print VAR              Prints the STRING assigned to VAR \n");
+	printf("run SCRIPT.TXT         Executes the file SCRIPT.TXT \n");
+	return 0;
 
 }
 
 int containsKey(struct MEM * memarray, char** command){
     int index = -1;
-    printf("KEY IS : %s\n", command[1]);
+    // printf("KEY IS : %s\n", command[1]);
      for(int i=0; i<sizeof(memarray) && memarray[i].var != NULL; ++i){
-         printf("CHAR IS : %s\n", memarray[i].var);
+        //  printf("CHAR IS : %s\n", memarray[i].var);
          if(strcmp(memarray[i].var, command[1])==0){
-             printf("MEMARRAY CUR VAL IS : %s\n", memarray[i].var);
-             printf("CONTAINS FOUND : %s\n", memarray[i].value);
+            //  printf("MEMARRAY CUR VAL IS : %s\n", memarray[i].var);
+            //  printf("CONTAINS FOUND : %s\n", memarray[i].value);
              return i;
          }
      }

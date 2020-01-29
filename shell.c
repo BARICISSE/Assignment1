@@ -50,7 +50,7 @@ int main(){
     //     printf("CHAR FOR STRUCT %d : %s\n", j,  memarray[j].var);
     // }
     // printf("\n SIZE OF MEMARRAY : %d", j);
-    printArt();
+    //printArt();
     printf("\nWelcome to the obaric shell!\n Version 1.0 Created January 2020\n$ ");
     while(1){
         fgets(input, 1000, stdin);
