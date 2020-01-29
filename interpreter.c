@@ -126,7 +126,7 @@ void help(){
 	printf("set VAR STRING         Assigns a value to shell memory \n");
 	printf("print VAR              Prints the STRING assigned to VAR \n");
 	printf("run SCRIPT.TXT         Executes the file SCRIPT.TXT \n");
-	return 0;
+	
 
 }
 
