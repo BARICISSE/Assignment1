@@ -94,12 +94,17 @@ void set(char ** command, struct MEM * memarray){
      }
     printf("Index is : %d\n", index);
    if(index >= 0){
+        if(index==sizeof(memarray)){
+            memarray=realloc(memarray, 2*sizeof(memarray));
+        }
         memarray[index].var = strdup(ptr1);
         memarray[index].value = strdup(ptr2);
     
    } else {
        printf("%s NOT FOUND\n", ptr1);
-       
+       if(index==sizeof(memarray)){
+            memarray=realloc(memarray, 2*sizeof(memarray));
+        }
        for(int i=0; i<sizeof(memarray) && memarray[i].var!=NULL; ++i){
            printf("i is : %d\n", i);
            index = i;
