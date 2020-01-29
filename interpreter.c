@@ -8,6 +8,7 @@ void help();
 void run();
 void print();
 void set();
+void run();
 int containsKey();
 
 int interpreter(char **command, struct MEM * memarray){
@@ -77,7 +78,9 @@ void set(char ** command, struct MEM * memarray){
     strcpy(ptr2, command[2]);
     
     for(int i=3; i<sizeof(command) & command[i] != NULL; i++){
+        strcat(ptr2, " ");
         strcat(ptr2, command[i]);
+        
     }
     
     struct MEM temp;
