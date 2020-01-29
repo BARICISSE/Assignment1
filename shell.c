@@ -10,33 +10,14 @@
 
 
 #define clear() printf("\033[H\033[J")
-char **parse(char *input){
-    char **command = malloc(1000*sizeof(char *));
-    char *separator = " ";
-    char *parsed;
-    int index = 0;
-    parsed = strtok(input, separator);
-    
-    int i = 3;
-    while(parsed != NULL){
-        command[index] = parsed;
-       // printf("%s\n", command[index]);
-        index++;
-
-        parsed = strtok(NULL, separator);
-      
-        i--;
-    }
-    command[index] = parsed;
-    index++;
-    command[index] = NULL;
-    
-    return command;
-}
-
 void print_image(FILE *fptr);
 void printArt();
 void initializeStruct(struct MEM* memarrayarray);
+void helper(char**command, size_t sizeCommand, struct MEM *memarray, size_t sizeMem);
+
+char **parse(char *input, struct MEM* memarray, size_t sizeMem);
+
+
 int main(){
     clear();
     char **command = malloc(1000*sizeof(char *));
@@ -49,24 +30,21 @@ int main(){
     // for(j=0; j<sizeof(struct MEM); ++j){
     //     printf("CHAR FOR STRUCT %d : %s\n", j,  memarray[j].var);
     // }
-    // printf("\n SIZE OF MEMARRAY : %d", j);
+    
+    
     //printArt();
     printf("\nWelcome to the obaric shell!\nVersion 1.0 Created January 2020\n$ ");
     while(1){
+        
         fgets(input, 1000, stdin);
         while(input[strlen(input)-1] == '\r' || input[strlen(input)-1] == '\n'){
 			input[strlen(input)-1] = '\0';
         }
         char *inputStr = input;
-        
-        command = parse(inputStr);
-        
-        int i = interpreter(command, memarray);
-        if(i==-2){
-               printf("Bye!\n");
-               _Exit(0);
-        } 
-        
+        int size = 1000;
+        size_t sizeMem = (size_t)size;
+       // printf("\n SIZE OF MEMARRAY : %zu",sizeMem);
+        command = parse(inputStr, memarray, sizeMem);
       
        free(command);
     }
@@ -74,6 +52,39 @@ int main(){
     free(memarray);
     
     return 0;
+}
+void helper(char**command, size_t sizeCommand, struct MEM *memarray, size_t sizeMem){
+        
+        
+        int i = interpreter(command, sizeCommand, memarray, sizeMem);
+        if(i==-2){
+               printf("Bye!\n");
+               _Exit(0);
+        } 
+}
+char **parse(char *input, struct MEM* memarray, size_t sizeMem){
+    char **command = malloc(1000*sizeof(char *));
+    char *separator = " ";
+    char *parsed;
+    int index = 0;
+    parsed = strtok(input, separator);
+    
+    
+    while(parsed != NULL){
+        command[index] = parsed;
+        //printf("commandss: %s\n", command[index]);
+        index++;
+
+        parsed = strtok(NULL, separator);
+      
+    }
+    index++;
+    
+    command[index] = NULL;
+    size_t sizeCommand = (size_t)(index);
+    // printf("PARSED COMAND SIZE %zu\n", sizeCommand);
+    helper(command, sizeCommand, memarray, sizeMem);
+    return command;
 }
 void print_image(FILE *fptr)
 {

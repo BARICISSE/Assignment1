@@ -1,1 +1,1 @@
-int interpreter(char ** command, struct MEM * memarray);
+int interpreter(char **command, size_t sizeCommand, struct MEM * memarray, size_t sizeMem);
