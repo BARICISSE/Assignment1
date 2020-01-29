@@ -1,1 +1,5 @@
-extern struct MEM memarray;
+struct MEM {
+    char *var;
+    char *value;
+    
+} *memarrayarray;

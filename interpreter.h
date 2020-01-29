@@ -1,0 +1,1 @@
+int interpreter(char ** command, struct MEM * memarray);
