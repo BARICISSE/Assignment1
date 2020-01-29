@@ -20,7 +20,7 @@ char **parse(char *input){
     int i = 3;
     while(parsed != NULL){
         command[index] = parsed;
-        printf("%s\n", command[index]);
+       // printf("%s\n", command[index]);
         index++;
 
         parsed = strtok(NULL, separator);

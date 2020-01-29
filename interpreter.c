@@ -54,7 +54,7 @@ void print(char ** command, struct MEM * memarray){
     //printf("======checking contains:\n");
     int index =-1;
     for(int i=0; i<sizeof(memarray) && memarray[i].var != NULL; ++i){
-         printf("CHAR IS : %s\n", memarray[i].var);
+        //  printf("CHAR IS : %s\n", memarray[i].var);
          if(strcmp(memarray[i].var, command[1])==0){
              index = i;
              break;
