@@ -6,6 +6,8 @@
 #include<sys/wait.h> 
 #include<readline/history.h> 
 #include "shellmemory.h"
+#include "interpreter.h"
+
 #define MAX_LEN 128
 
 
@@ -66,8 +68,12 @@ void parse(char *input, struct MEM** memarray, size_t *sizeMem){
         parsed = strtok(NULL, separator);
       
     }
-   
-    interpreter(command, (size_t)(index), memarray, sizeMem);
+    int errorCode = 0;
+    errorCode = interpreter(command, (size_t)(index), memarray, sizeMem);
+    if(errorCode ==-2){
+        printf("Bye!\n");
+        _Exit(0);
+    }
     
 }
 void print_image(FILE *fptr)
