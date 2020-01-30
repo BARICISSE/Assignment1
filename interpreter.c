@@ -7,40 +7,40 @@
 #define S 0
 void help();
 void run(char **command, size_t sizeCommand, struct MEM *memarray, size_t sizeMem);
-void print(char **command, size_t sizeCommand, struct MEM *memarray, size_t sizeMem);
-void set(char **command, size_t sizeCommand, struct MEM *memarray, size_t sizeMem);
+void print(char **command, size_t sizeCommand, struct MEM **emarray, size_t *sizeMem);
+void set(char **command, size_t sizeCommand, struct MEM **memarray, size_t *sizeMem);
 
 int containsKey();
 
-int interpreter(char **command, size_t sizeCommand, struct MEM *memarray, size_t sizeMem)
+int interpreter(char **command, size_t sizeCommand, struct MEM **memarray, size_t *sizeMem)
 {
 
     // maps command to corresponding function
     char *commandName = command[0];
     //printf("commandnAME: %s\n", commandName);
-    if (strcmp(commandName, "quit") == 0)
+    if (strcmp(commandName, "quit") == 0 && sizeCommand == 1)
     {
         return -2;
     }
-    else if (strcmp(commandName, "help") == 0)
+    else if (strcmp(commandName, "help") == 0 && sizeCommand == 1)
     {
         help();
         return 0;
     }
-    else if (strcmp(commandName, "set") == 0)
+    else if (strcmp(commandName, "set") == 0 && sizeCommand == 3)
     {
         set(command, sizeCommand, memarray, sizeMem);
         return 0;
     }
-    else if (strcmp(commandName, "print") == 0)
+    else if (strcmp(commandName, "print") == 0 && sizeCommand == 2)
     {
         print(command, sizeCommand, memarray, sizeMem);
         
         return 0;
     }
-    else if (strcmp(commandName, "run") == 0)
+    else if (strcmp(commandName, "run") == 0 && sizeCommand == 2)
     {
-        run(command, sizeCommand, memarray, sizeMem);
+        // run(command, sizeCommand, memarray, sizeMem);
         return 0;
     }
     else
@@ -86,7 +86,7 @@ void run(char **command, size_t sizeCommand, struct MEM *memarray, size_t sizeMe
     {
         char *ptr = arrayLines[j];
 
-        command2 = parse(ptr, memarray, sizeMem);
+        parse(ptr, memarray, sizeMem);
         //interpreter(command2, nsizeCommand, memarray, sizeMem);
 
         j++;
@@ -95,16 +95,12 @@ void run(char **command, size_t sizeCommand, struct MEM *memarray, size_t sizeMe
     free(command2);
     free(arrayLines);
 }
-void print(char **command, size_t sizeCommand, struct MEM *memarray, size_t sizeMem)
+void print(char **command, size_t sizeCommand, struct MEM **memarray, size_t *sizeMem)
 {
-    char varName[100];
-    char *ptr1 = varName;
-    ptr1 = strdup(command[1]);
-
     int index = -1;
-    for (int i = 0; i < sizeMem && memarray[i].var != NULL; i++)
+    for (int i = 0; i < *sizeMem && (*memarray)[i].var != NULL; i++)
     {
-        if (strcmp(memarray[i].var, command[1]) == 0)
+        if (strcmp((*memarray)[i].var, command[1]) == 0)
         {
             index = i;
             break;
@@ -114,33 +110,22 @@ void print(char **command, size_t sizeCommand, struct MEM *memarray, size_t size
         printf("Variable does not exist\n");
     else if (index >= 0)
     {
-        char *value = memarray[index].value;
+        char *value = (*memarray)[index].value;
         printf("%s\n", value);
     }
 }
 
-void set(char **command, size_t sizeCommand, struct MEM *memarray, size_t sizeMem)
+void set(char **command, size_t sizeCommand, struct MEM **memarray, size_t *sizeMem)
 {
+    char *key = strdup(command[1]);
+    char *val = strdup(command[2]);
 
-    char varName[100];
-    char value[100];
-    char *ptr1 = varName;
-    char *ptr2 = value;
-
-    strcpy(ptr1, command[1]);
-    strcpy(ptr2, command[2]);
-
-    for (int i = 3; i < sizeCommand & command[i] != NULL; i++)
-    {
-        strcat(ptr2, " ");
-        strcat(ptr2, command[i]);
-    }
 
     int index = -1;
-    for (int i = 0; i < sizeMem && memarray[i].var != NULL; i++)
+    for (int i = 0; i < *sizeMem && (*memarray)[i].var != NULL; i++)
     {
-
-        if (strcmp(memarray[i].var, ptr1) == 0)
+        puts("loop");
+        if (strcmp((*memarray)[i].var, key) == 0)
         {
 
             index = i;
@@ -150,25 +135,25 @@ void set(char **command, size_t sizeCommand, struct MEM *memarray, size_t sizeMe
 
     if (index >= 0)
     {
-        memarray[index].value = strdup(ptr2);
+        (*memarray)[index].value = val;
     }
     else
     {
+        int i;
+        for (i = 0; i < *sizeMem && (*memarray)[i].var != NULL; i++);
 
-        for (int i = 0; i < sizeMem && memarray[i].var != NULL; i++)
+        if (i >= *sizeMem)
         {
-
-            index = i;
+            // puts("entered");
+            *sizeMem *= 2;
+            *memarray = realloc(*memarray, *sizeMem * sizeof(struct MEM));
+            for(int ctr = i; ctr < *sizeMem; ctr++) {
+                (*memarray)[ctr].var = NULL;
+                (*memarray)[ctr].value = NULL;
+            }
         }
-
-        index = index + 1;
-        if (index >= sizeMem)
-        {
-            sizeMem = 2 * sizeMem;
-            memarray = realloc(memarray, sizeMem);
-        }
-        memarray[index].var = strdup(ptr1);
-        memarray[index].value = strdup(ptr2);
+        (*memarray)[i].var = key;
+        (*memarray)[i].value = val;
     }
 }
 void help()

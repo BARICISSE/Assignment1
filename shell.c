@@ -13,48 +13,36 @@
 void print_image(FILE *fptr);
 void printArt();
 void initializeStruct(struct MEM* memarrayarray);
-void helper(char**command, size_t sizeCommand, struct MEM *memarray, size_t sizeMem);
 
-char **parse(char *input, struct MEM* memarray, size_t sizeMem);
+void parse(char *input, struct MEM** memarray, size_t *sizeMem);
 
 
 int main(){
     clear();
-    char **command = malloc(1000*sizeof(char *));
     
     char input[1000];
-    struct MEM *memarray = (struct MEM *) malloc(1000 * sizeof(struct MEM));
+    size_t size = 2;
+    struct MEM *memarray = (struct MEM *) calloc(2, sizeof(struct MEM));
     
-    printf("\nWelcome to the obaric shell!\nVersion 1.0 Created January 2020\n$ ");
+    printf("\nWelcome to the Ousmane Baricisse shell!\nVersion 1.0 Created January 2020\n$ ");
     while(1){
         
         fgets(input, 1000, stdin);
-        while(input[strlen(input)-1] == '\r' || input[strlen(input)-1] == '\n'){
+        if(input[strlen(input)-1] == '\r' || input[strlen(input)-1] == '\n'){
 			input[strlen(input)-1] = '\0';
         }
         char *inputStr = input;
-        int size = 1000;
-        size_t sizeMem = (size_t)size;
+        
+        parse(inputStr, &memarray, &size);
       
-        command = parse(inputStr, memarray, sizeMem);
-      
-       free(command);
     }
      
     free(memarray);
     
     return 0;
 }
-void helper(char**command, size_t sizeCommand, struct MEM *memarray, size_t sizeMem){
-        
-        
-        int i = interpreter(command, sizeCommand, memarray, sizeMem);
-        if(i==-2){
-               printf("Bye!\n");
-               _Exit(0);
-        } 
-}
-char **parse(char *input, struct MEM* memarray, size_t sizeMem){
+
+void parse(char *input, struct MEM** memarray, size_t *sizeMem){
     char **command = malloc(1000*sizeof(char *));
     char *separator = " ";
     char *parsed;
@@ -70,13 +58,9 @@ char **parse(char *input, struct MEM* memarray, size_t sizeMem){
         parsed = strtok(NULL, separator);
       
     }
-    index++;
-    
-    command[index] = NULL;
-    size_t sizeCommand = (size_t)(index);
    
-    helper(command, sizeCommand, memarray, sizeMem);
-    return command;
+    interpreter(command, (size_t)(index), memarray, sizeMem);
+    
 }
 void print_image(FILE *fptr)
 {
