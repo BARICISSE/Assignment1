@@ -1,0 +1,6 @@
+help
+set 1 1
+print 1
+set 1 2
+print 2
+print x

@@ -6,7 +6,7 @@
 #include "shell.h"
 #define S 0
 void help();
-void run(char **command, size_t sizeCommand, struct MEM *memarray, size_t sizeMem);
+void run(char **command, size_t sizeCommand, struct MEM **memarray, size_t *sizeMem);
 void print(char **command, size_t sizeCommand, struct MEM **emarray, size_t *sizeMem);
 void set(char **command, size_t sizeCommand, struct MEM **memarray, size_t *sizeMem);
 
@@ -40,7 +40,7 @@ int interpreter(char **command, size_t sizeCommand, struct MEM **memarray, size_
     }
     else if (strcmp(commandName, "run") == 0 && sizeCommand == 2)
     {
-        // run(command, sizeCommand, memarray, sizeMem);
+        run(command, sizeCommand, memarray, sizeMem);
         return 0;
     }
     else
@@ -51,7 +51,7 @@ int interpreter(char **command, size_t sizeCommand, struct MEM **memarray, size_
 
     return 0;
 }
-void run(char **command, size_t sizeCommand, struct MEM *memarray, size_t sizeMem)
+void run(char **command, size_t sizeCommand, struct MEM **memarray, size_t *sizeMem)
 {
     const char *filename = command[1];
     FILE *file = fopen(filename, "r");
@@ -60,40 +60,24 @@ void run(char **command, size_t sizeCommand, struct MEM *memarray, size_t sizeMe
         printf("Script not found\n");
         return;
     }
-    char line[1000];
-    char **arrayLines = malloc(1000 * sizeof(char *));
-    char **command2;
-    int i = 0;
+    char *line = malloc(sizeof(char) * 1000);
+    check_malloc(line);
 
-    while (fgets(line, sizeof(line), file))
+    while (fgets(line, 1000, file))
     {
-        while (line[strlen(line) - 1] == '\r' || line[strlen(line) - 1] == '\n')
+        int len = strlen(line);
+        if(line[len - 1] == '\n')
         {
-            line[strlen(line) - 1] = '\0';
+            line[len - 1] = '\0';
         }
-        arrayLines[i] = strdup(line);
+        if(line[len - 2] == '\r') {
+            line[len - 2] = '\0';
+        }
+        parse(line, memarray, sizeMem);
 
-        i++;
     }
 
     fclose(file);
-    
-    size_t nsizeCommand = (size_t)(i + 1);
-    int fileSize = i + 1;
-
-    int j = 0;
-    while (j < nsizeCommand - 1)
-    {
-        char *ptr = arrayLines[j];
-
-        parse(ptr, memarray, sizeMem);
-        //interpreter(command2, nsizeCommand, memarray, sizeMem);
-
-        j++;
-    }
-
-    free(command2);
-    free(arrayLines);
 }
 void print(char **command, size_t sizeCommand, struct MEM **memarray, size_t *sizeMem)
 {
@@ -124,7 +108,6 @@ void set(char **command, size_t sizeCommand, struct MEM **memarray, size_t *size
     int index = -1;
     for (int i = 0; i < *sizeMem && (*memarray)[i].var != NULL; i++)
     {
-        puts("loop");
         if (strcmp((*memarray)[i].var, key) == 0)
         {
 
@@ -144,9 +127,9 @@ void set(char **command, size_t sizeCommand, struct MEM **memarray, size_t *size
 
         if (i >= *sizeMem)
         {
-            // puts("entered");
             *sizeMem *= 2;
             *memarray = realloc(*memarray, *sizeMem * sizeof(struct MEM));
+            check_malloc(memarray);
             for(int ctr = i; ctr < *sizeMem; ctr++) {
                 (*memarray)[ctr].var = NULL;
                 (*memarray)[ctr].value = NULL;
@@ -166,19 +149,3 @@ void help()
     printf("run SCRIPT.TXT         Executes the file SCRIPT.TXT \n");
 }
 
-int containsKey(struct MEM *memarray, char **command, size_t sizeMem)
-{
-    int index = -1;
-    // printf("KEY IS : %s\n", command[1]);
-    for (int i = 0; i < (int)sizeof(memarray) && memarray[i].var != NULL; ++i)
-    {
-        //  printf("CHAR IS : %s\n", memarray[i].var);
-        if (strcmp(memarray[i].var, command[1]) == 0)
-        {
-            //  printf("MEMARRAY CUR VAL IS : %s\n", memarray[i].var);
-            //  printf("CONTAINS FOUND : %s\n", memarray[i].value);
-            return i;
-        }
-    }
-    return index;
-}

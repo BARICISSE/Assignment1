@@ -16,13 +16,20 @@ void initializeStruct(struct MEM* memarrayarray);
 
 void parse(char *input, struct MEM** memarray, size_t *sizeMem);
 
+void check_malloc(void *ptr) {
+    if(ptr == NULL) {
+        puts("failed to allocate memory!");
+        exit(1);
+    }
+} 
 
 int main(){
     clear();
     
     char input[1000];
-    size_t size = 2;
-    struct MEM *memarray = (struct MEM *) calloc(2, sizeof(struct MEM));
+    size_t size = 10;
+    struct MEM *memarray = (struct MEM *) calloc(size, sizeof(struct MEM));
+    check_malloc(memarray);
     
     printf("\nWelcome to the Ousmane Baricisse shell!\nVersion 1.0 Created January 2020\n$ ");
     while(1){
@@ -44,6 +51,7 @@ int main(){
 
 void parse(char *input, struct MEM** memarray, size_t *sizeMem){
     char **command = malloc(1000*sizeof(char *));
+    check_malloc(command);
     char *separator = " ";
     char *parsed;
     int index = 0;
