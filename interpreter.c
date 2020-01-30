@@ -70,6 +70,9 @@ void run(char **command, size_t sizeCommand, struct MEM **memarray, size_t *size
         {
             line[len - 1] = '\0';
         }
+        if(line[len - 1] == '\r') {
+            line[len - 2] = '\0';
+        }
         if(line[len - 2] == '\r') {
             line[len - 2] = '\0';
         }
