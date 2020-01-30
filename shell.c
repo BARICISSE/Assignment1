@@ -24,15 +24,7 @@ int main(){
     
     char input[1000];
     struct MEM *memarray = (struct MEM *) malloc(1000 * sizeof(struct MEM));
-    //initializeStruct(memarray);
-    //int j = 0;
-   
-    // for(j=0; j<sizeof(struct MEM); ++j){
-    //     printf("CHAR FOR STRUCT %d : %s\n", j,  memarray[j].var);
-    // }
     
-    
-    //printArt();
     printf("\nWelcome to the obaric shell!\nVersion 1.0 Created January 2020\n$ ");
     while(1){
         
@@ -43,7 +35,7 @@ int main(){
         char *inputStr = input;
         int size = 1000;
         size_t sizeMem = (size_t)size;
-       // printf("\n SIZE OF MEMARRAY : %zu",sizeMem);
+      
         command = parse(inputStr, memarray, sizeMem);
       
        free(command);
@@ -72,7 +64,7 @@ char **parse(char *input, struct MEM* memarray, size_t sizeMem){
     
     while(parsed != NULL){
         command[index] = parsed;
-        //printf("commandss: %s\n", command[index]);
+        
         index++;
 
         parsed = strtok(NULL, separator);
@@ -82,7 +74,7 @@ char **parse(char *input, struct MEM* memarray, size_t sizeMem){
     
     command[index] = NULL;
     size_t sizeCommand = (size_t)(index);
-    // printf("PARSED COMAND SIZE %zu\n", sizeCommand);
+   
     helper(command, sizeCommand, memarray, sizeMem);
     return command;
 }
